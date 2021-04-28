@@ -57,4 +57,26 @@ public class EmployeeRestController {
 
     }
 
+    //Updating employee using PUT mapping
+
+    @PutMapping("/employees")
+    public Employee updateEmployee(@RequestBody Employee theEmployee){
+        employeeService.saveEmployee(theEmployee);
+
+        return employeeService.getEmployeeById(theEmployee.getId());
+    }
+
+
+    @DeleteMapping("/employees/{employeeid}")
+    public String deleteEmployee(@PathVariable int employeeid){
+        Employee theEmployee=employeeService.getEmployeeById(employeeid);
+
+        if(theEmployee==null){
+            throw new RuntimeException("This Employee does not exist");
+        }
+        employeeService.deleteEmployeeById(employeeid);
+        return ("Deleted Employee with id: "+ employeeid);
+    }
+
+
 }
