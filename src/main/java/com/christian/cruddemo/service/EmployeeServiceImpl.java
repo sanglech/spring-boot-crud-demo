@@ -1,6 +1,7 @@
 package com.christian.cruddemo.service;
 
 import com.christian.cruddemo.dao.EmployeeDAO;
+import com.christian.cruddemo.dao.EmployeeRepository;
 import com.christian.cruddemo.entity.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -8,14 +9,55 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class EmployeeServiceImpl implements EmployeeService{
+public class EmployeeServiceImpl implements EmployeeService {
 
-    private EmployeeDAO employeeDAO;
+    private EmployeeRepository employeeRepository;
+
+    @Autowired
+    public EmployeeServiceImpl(EmployeeRepository theEmployeeRepository){
+        employeeRepository=theEmployeeRepository;
+    }
+
+    //No need for transactional for JPASpring data as it does transactional already
+    @Override
+    public List<Employee> findAll() {
+        return employeeRepository.findAll();
+    }
+
+    @Override
+    public Employee getEmployeeById(int id) {
+        Optional<Employee> result = employeeRepository.findById(id);
+        Employee theEmployee=null;
+        if(result.isPresent()){
+            theEmployee= result.get();
+            return theEmployee;
+        }
+        else{
+            throw new RuntimeException("Could not find employee with id: " + id);
+        }
+
+    }
+
+    @Override
+    public void saveEmployee(Employee theEmployee) {
+        employeeRepository.save(theEmployee);
+    }
+
+    @Override
+    public void deleteEmployeeById(int theId) {
+        employeeRepository.deleteById(theId);
+    }
+
 
     //beanid is class name starting with lowercase
     //tells spring which bean to use
+    /*
+
+       private EmployeeDAO employeeDAO;
+
     @Autowired
     public EmployeeServiceImpl(@Qualifier("employeeDAOJPAImpl") EmployeeDAO theEmployeeDAO){
         employeeDAO=theEmployeeDAO;
@@ -42,5 +84,5 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Transactional
     public void deleteEmployeeById(int theId) {
         employeeDAO.deleteEmployeeById(theId);
-    }
+    }*/
 }
