@@ -25,3 +25,10 @@ hs_err_pid*
 #.Intellij
 *.idea/*
 *.iml
+.DS_Store
+src/.DS_Store
+src/main/.DS_Store
+src/main/java/.DS_Store
+src/main/java/com/.DS_Store
+src/main/java/com/christian/.DS_Store
+src/main/java/com/christian/cruddemo/.DS_Store
